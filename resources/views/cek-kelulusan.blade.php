@@ -45,7 +45,13 @@
                 </svg>
             </div>
             <h1 class="text-3xl md:text-4xl font-bold mb-2">Pengumuman Kelulusan</h1>
-            <p class="text-lg text-blue-100">Siswa Kelas XII SMA / SMK</p>
+            <p class="text-lg text-blue-100">Siswa Kelas XII
+                @if (isset($pengumuman) && $pengumuman)
+                    {{ $pengumuman->tipe_sekolah }}
+                @else
+                    SMA / SMK
+                @endif
+            </p>
             @if (isset($pengumuman) && $pengumuman)
                 <p class="mt-2 text-yellow-200 font-semibold">Tahun Ajaran {{ $pengumuman->tahun_ajaran }}</p>
             @endif
