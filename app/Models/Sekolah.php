@@ -23,4 +23,9 @@ class Sekolah extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function pengumumen()
+    {
+        return $this->hasMany(Pengumuman::class);
+    }
 }

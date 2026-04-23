@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PengumumanResource\Pages;
 use App\Models\Pengumuman;
+use App\Models\Sekolah;
 use Filament\Actions;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -47,6 +48,13 @@ class PengumumanResource extends Resource
                     ])
                     ->required()
                     ->default('SMA'),
+                Forms\Components\Select::make('sekolah_id')
+                    ->label('Sekolah')
+                    ->relationship('sekolah', 'nama')
+                    ->searchable()
+                    ->preload()
+                    ->nullable()
+                    ->helperText('Pilih sekolah untuk pengumuman khusus sekolah tersebut. Kosongkan untuk pengumuman global (semua sekolah).'),
                 Forms\Components\DateTimePicker::make('tanggal_pengumuman')
                     ->label('Tanggal & Waktu Pengumuman')
                     ->required()
@@ -77,6 +85,12 @@ class PengumumanResource extends Resource
                         'SMK' => 'success',
                     })
                     ->sortable(),
+                Tables\Columns\TextColumn::make('sekolah.nama')
+                    ->label('Sekolah')
+                    ->searchable()
+                    ->sortable()
+                    ->default('Semua Sekolah')
+                    ->placeholder('Semua Sekolah'),
                 Tables\Columns\TextColumn::make('tanggal_pengumuman')
                     ->date('d M Y')
                     ->sortable(),

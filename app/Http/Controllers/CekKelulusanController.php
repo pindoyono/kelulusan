@@ -12,7 +12,9 @@ class CekKelulusanController extends Controller
 {
     public function index()
     {
+        // Show only global announcements (sekolah_id is null) on homepage
         $pengumuman = Pengumuman::where('is_published', true)
+            ->whereNull('sekolah_id')
             ->orderBy('tanggal_pengumuman', 'desc')
             ->first();
 
@@ -30,22 +32,40 @@ class CekKelulusanController extends Controller
             'nisn' => 'required|string|max:20',
         ]);
 
-        $pengumuman = Pengumuman::where('is_published', true)
-            ->orderBy('tanggal_pengumuman', 'desc')
-            ->first();
+        $siswa = Siswa::where('nisn', $request->nisn)->first();
+
+        // Get pengumuman based on siswa's sekolah or global
+        $pengumumanQuery = Pengumuman::where('is_published', true);
+
+        if ($siswa) {
+            // Filter: pengumuman untuk sekolah siswa atau pengumuman global (sekolah_id null)
+            $pengumumanQuery->where(function ($q) use ($siswa) {
+                $q->where('sekolah_id', $siswa->sekolah_id)
+                  ->orWhereNull('sekolah_id');
+            });
+        } else {
+            // Jika siswa tidak ditemukan, hanya tampilkan pengumuman global
+            $pengumumanQuery->whereNull('sekolah_id');
+        }
+
+        $pengumuman = $pengumumanQuery->orderBy('tanggal_pengumuman', 'desc')->first();
 
         // Block search if countdown is still active
         if ($pengumuman && $pengumuman->tanggal_pengumuman->isFuture()) {
             return redirect()->route('cek-kelulusan');
         }
 
-        $siswa = Siswa::where('nisn', $request->nisn)->first();
-
         $kelulusan = null;
         if ($siswa) {
             $kelulusan = Kelulusan::with(['siswa.sekolah', 'pengumuman'])
                 ->where('siswa_id', $siswa->id)
-                ->whereHas('pengumuman', fn ($q) => $q->where('is_published', true))
+                ->whereHas('pengumuman', function ($q) use ($siswa) {
+                    $q->where('is_published', true)
+                      ->where(function ($query) use ($siswa) {
+                          $query->where('sekolah_id', $siswa->sekolah_id)
+                                ->orWhereNull('sekolah_id');
+                      });
+                })
                 ->latest()
                 ->first();
         }
