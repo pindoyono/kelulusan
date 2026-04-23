@@ -39,6 +39,14 @@ class PengumumanResource extends Resource
                     ->required()
                     ->placeholder('2025/2026')
                     ->maxLength(20),
+                Forms\Components\Select::make('tipe_sekolah')
+                    ->label('Tipe Sekolah')
+                    ->options([
+                        'SMA' => 'SMA',
+                        'SMK' => 'SMK',
+                    ])
+                    ->required()
+                    ->default('SMA'),
                 Forms\Components\DateTimePicker::make('tanggal_pengumuman')
                     ->label('Tanggal & Waktu Pengumuman')
                     ->required()
@@ -60,6 +68,14 @@ class PengumumanResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tahun_ajaran')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('tipe_sekolah')
+                    ->label('Tipe Sekolah')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'SMA' => 'info',
+                        'SMK' => 'success',
+                    })
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tanggal_pengumuman')
                     ->date('d M Y')

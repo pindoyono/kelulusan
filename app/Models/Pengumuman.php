@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pengumuman extends Model
 {
     protected $fillable = [
-        'judul', 'tahun_ajaran', 'tanggal_pengumuman', 'deskripsi', 'is_published',
+        'judul', 'tahun_ajaran', 'tipe_sekolah', 'tanggal_pengumuman', 'deskripsi', 'is_published',
     ];
 
     protected $casts = [
