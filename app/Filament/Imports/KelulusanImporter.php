@@ -37,9 +37,22 @@ class KelulusanImporter extends Importer
                 ->rules(['required', 'in:lulus,tidak_lulus']),
             ImportColumn::make('nilai_rata_rata')
                 ->label('Nilai Rata-rata')
-                ->numeric(decimalPlaces: 2)
-                ->rules(['nullable', 'numeric', 'min:0', 'max:100']),
+                ->castStateUsing(function (?string $state): ?float {
+                    if (blank($state) || trim($state) === '-') {
+                        return null;
+                    }
+                    // Ganti koma desimal (88,95) menjadi titik (88.95)
+                    $state = str_replace(',', '.', trim($state));
+                    return is_numeric($state) ? (float) $state : null;
+                })
+                ->rules(['nullable']),
             ImportColumn::make('keterangan')
+                ->castStateUsing(function (?string $state): ?string {
+                    if (blank($state) || trim($state) === '-') {
+                        return null;
+                    }
+                    return trim($state);
+                })
                 ->rules(['nullable', 'string', 'max:500']),
         ];
     }

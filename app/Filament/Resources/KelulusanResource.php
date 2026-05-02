@@ -95,7 +95,10 @@ class KelulusanResource extends Resource
                 Tables\Columns\TextColumn::make('siswa.nisn')
                     ->label('NISN')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->copyable()
+                    ->copyMessage('NISN disalin!')
+                    ->copyMessageDuration(1500),
                 Tables\Columns\TextColumn::make('siswa.nama')
                     ->label('Nama Siswa')
                     ->searchable()

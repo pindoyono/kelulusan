@@ -12,9 +12,8 @@ class CekKelulusanController extends Controller
 {
     public function index()
     {
-        // Show only global announcements (sekolah_id is null) on homepage
+        // Show any published announcement (global or school-specific) for countdown/info
         $pengumuman = Pengumuman::where('is_published', true)
-            ->whereNull('sekolah_id')
             ->orderBy('tanggal_pengumuman', 'desc')
             ->first();
 

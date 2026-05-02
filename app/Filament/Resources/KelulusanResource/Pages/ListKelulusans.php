@@ -146,6 +146,7 @@ class ListKelulusans extends ListRecords
                 }),
             Actions\ImportAction::make()
                 ->importer(KelulusanImporter::class)
+                ->csvDelimiter(';')
                 ->modalDescription(null),
             Actions\CreateAction::make(),
         ];

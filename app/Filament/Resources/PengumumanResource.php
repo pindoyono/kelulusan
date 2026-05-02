@@ -58,7 +58,9 @@ class PengumumanResource extends Resource
                 Forms\Components\DateTimePicker::make('tanggal_pengumuman')
                     ->label('Tanggal & Waktu Pengumuman')
                     ->required()
+                    ->native(false)
                     ->seconds(false)
+                    ->displayFormat('d/m/Y H:i')
                     ->helperText('Hitung mundur akan tampil di halaman publik sampai waktu ini tercapai'),
                 Forms\Components\RichEditor::make('deskripsi')
                     ->columnSpanFull(),
